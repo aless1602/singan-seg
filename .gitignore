@@ -7,7 +7,7 @@ __pycache__/
 *.so
 
 # added by Vajira
-TrainedModels
+#TrainedModels
 
 # Distribution / packaging
 .Python
