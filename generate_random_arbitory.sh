@@ -1,12 +1,12 @@
 #!/bin/sh
 
-python random_samples.py --input_name datacenter_03.png \
+python random_samples.py --input_name 0035-sample.png \
                          --mode random_samples_arbitrary_sizes \
                          --gen_start_scale 0 \
                          --nc_z 4 \
                          --nc_im 4 \
                          --gpu_id 0 \
-                         --input_dir /work/vajira/DATA/michael_data/img_and_mask_together \
+                         --input_dir /home/aless/singan-seg/Input/Images \
                          --num_samples 10 \
-                         --scale_h 2 \
-                         --scale_v 4
+                         --scale_h 1.05 \
+                         --scale_v 1.05
