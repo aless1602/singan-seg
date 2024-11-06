@@ -21,13 +21,12 @@ bash train.sh
 or
 
 ````python
-# polyp_with_4_channels.png is Input\Images\polyp_with_4_channels.png
-main_train.py --input_name polyp_with_4_channels.png  --nc_z 4 --nc_im 4 --gpu_id 0 
+python random_samples.py --input_name 0035-sample.png --mode random_samples --gen_start_scale 0 --nc_z 4 --nc_im 4 --gpu_id 0 --num_samples 10
 ````
 
 ## Personal training
 ````python
-python main_train.py --input_name 0035-sample.png  --nc_z 4 --nc_im 4 --gpu_id 0 --scale_factor 0.99 --noise_amp 0.1
+python main_train.py --input_name 0035-sample.png  --nc_z 4 --nc_im 4 --gpu_id 0 --scale_factor 0.85
 ````
 ## To generate samples from pre-trained models
 ```
@@ -46,4 +45,10 @@ python random_samples.py --input_name polyp_4_channel_test_1.png --mode random_s
 
 ```python
 python style_transfer.py --cimg_path /home/aless/singan-seg/Output/RandomSamples_ArbitrerySizes/0035-sample/scale_v=1.050000_scale_h=1.050000/0_img.png --simg_path /home/aless/singan-seg/Input/Images/0035-sample.png  --num_epochs 1000 --cw 1 --sw 1000 --device_id 0 --vgg "vgg16"
+```
+## Or Style Transfert on directory
+```python
+
+python style_transfer.py   --cimg_path /home/aless/singan-seg/Output/RandomSamples_ArbitrerySizes/0035-sample/scale_v=1.040000_scale_h=1.040000   --simg_path /home/aless/singan-seg/Input/Images/0035-sample.png   --output_dir /home/aless/singan-seg/Output/Styled_Images   --num_epochs 1000   --cw 1   --sw 1000   --device_id 0   --vgg "vgg16"
+
 ```

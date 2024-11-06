@@ -169,99 +169,86 @@ def transfer_style(content_img_path: str, style_img_path: str, num_epochs: int, 
 
 
 
-def transfer_style_to_folder(generated_img_dir_path, real_img_dir_path,  output_dir, num_epochs: int, content_weight: int, style_weight: int, 
-                   device: torch.device, vgg_model:str, verbose=False, *args, **kwargs):
-
-    ''' Trnsfering style from source image folder to target image folder.
-    
+def transfer_style_to_folder(generated_img_dir_path, style_img_path, output_dir, num_epochs: int, content_weight: int, style_weight: int, 
+                             device: torch.device, vgg_model:str, verbose=False, *args, **kwargs):
+    '''
+    Apply style transfer to each image in a directory with a single style image.
     Parameters
     ==========
-
     generated_img_dir_path: str
-        A path to a folder which has generated images from the generative funtions of this library (Don't rename the original file names).
-    real_img_dir_path: str
-        A path of the real image folder dowloaded into the checkpoint folder by this library (check the checkpoint directory given to download the checkpoints).
+        Path to the folder containing images to apply style transfer to.
+    style_img_path: str
+        Path to a single style image.
     output_dir: str
-        A path to save style transferred images.
+        Path to save style transferred images.
     num_epochs: int
-        Number of epoch to iterate for transfering style to content image.
+        Number of epochs for style transfer.
     content_weight: int
-        Weight to keep the content of the destination image.
+        Content weight.
     style_weight: int
-        Weight to transfer style from the source image.
+        Style weight.
     device: torch.device
-        Torch device object, either "CPU" or "CUDA". Refer Pytoch documentation for more detials.
+        CUDA or CPU device.
     vgg_model: str
-        A model to extract features.
+        Model name for VGG.
     verbose: bool
-        If true, loss values will be printed to stdout.
-    
-
-
-    Return
-    =======
-    None
-        There is no return from this function.
-    
+        Print details if True.
     '''
-    
-    generated_images = os.listdir(generated_img_dir_path)
-    real_images = os.listdir(real_img_dir_path)
     
     os.makedirs(output_dir, exist_ok=True)
     
-    generated_images_filtered = [img for img in generated_images if "mask" not in str(img)] # Remove mask images
+    # Filter out mask images and only keep the content images
+    generated_images_filtered = [img for img in os.listdir(generated_img_dir_path) if "mask" not in img]
     
-    #print(len(generated_images_filtered))
-    
-    pbar = tqdm(generated_images_filtered, position= 0, leave=False)
+    pbar = tqdm(generated_images_filtered, position=0, leave=False)
     for gen_img in pbar:
-        
-        
-        gen_img_id = gen_img.split("_")[2]
-        real_img_of_gen_img  = str(gen_img_id) + ".jpg"
-        
         gen_img_path = os.path.join(generated_img_dir_path, gen_img)
-        real_img_path = os.path.join(real_img_dir_path, real_img_of_gen_img)
         
-        pbar.set_description("Processing %s" % gen_img)
+        pbar.set_description(f"Processing {gen_img}")
         
-        #time.sleep(2)
+        # Apply style transfer
+        out_img = transfer_style(
+            content_img_path=gen_img_path,
+            style_img_path=style_img_path,
+            num_epochs=num_epochs,
+            content_weight=content_weight,
+            style_weight=style_weight,
+            device=device,
+            vgg_model=vgg_model,
+            verbose=verbose,
+            *args, **kwargs
+        )
         
-        #print("gen_img_path=", gen_img_path)
-        #print("real_img_path=", real_img_path)
-        
-        out_img = transfer_style(gen_img_path, real_img_path,
-                                 num_epochs, content_weight, style_weight, 
-                                 device, vgg_model, verbose, tqdm_position=0, tqdm_leave=False,
-                                 *args, **kwargs)
-        #return out_img
-        
-        out_img.save(os.path.join(output_dir, gen_img.split(".")[0] + "_ST" + ".png"))
+        # Save the output image
+        out_img.save(os.path.join(output_dir, gen_img.split(".")[0] + "_ST.png"))
 
-if __name__=="__main__":
 
+if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--cimg_path", help="Content img path")
     parser.add_argument("--simg_path", help="Style image path")
-    parser.add_argument("--num_epochs", help="Number of epochs", default=1000)
-    parser.add_argument("--output_dir", help="output_dir", default="/work/vajira/DATA/michael_data/style_transferred")
-    parser.add_argument("--cw", help="content weight", default=1)
-    parser.add_argument("--sw", help="Style weight", default=1000)
-    parser.add_argument("--device_id", help="Device ID", default=1)
+    parser.add_argument("--output_dir", help="Output directory", default="/work/vajira/DATA/michael_data/style_transferred")
+    parser.add_argument("--num_epochs", help="Number of epochs", type=int, default=1000)
+    parser.add_argument("--cw", help="Content weight", type=int, default=1)
+    parser.add_argument("--sw", help="Style weight", type=int, default=1000)
+    parser.add_argument("--device_id", help="Device ID", type=int, default=0)
     parser.add_argument("--vgg", help="VGG model", default="vgg16")
 
     opt = parser.parse_args()
 
-    run_device = torch.device("cuda:{}".format(opt.device_id) if torch.cuda.is_available() else "cpu")
+    run_device = torch.device(f"cuda:{opt.device_id}" if torch.cuda.is_available() else "cpu")
 
-    pil_img = transfer_style(opt.cimg_path, opt.simg_path, int(opt.num_epochs), int(opt.cw), int(opt.sw), 
-                   run_device, opt.vgg, verbose=False, tqdm_position=0, tqdm_leave=True)
-
-
-    save_path =  opt.cimg_path.split(".")[0] + "_ST" + ".png"
-    print(save_path)
-    pil_img.save(save_path)
+    transfer_style_to_folder(
+        generated_img_dir_path=opt.cimg_path,
+        style_img_path=opt.simg_path,
+        output_dir=opt.output_dir,
+        num_epochs=opt.num_epochs,
+        content_weight=opt.cw,
+        style_weight=opt.sw,
+        device=run_device,
+        vgg_model=opt.vgg,
+        verbose=False
+    )
 
 
     
