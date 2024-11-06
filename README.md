@@ -52,3 +52,8 @@ python style_transfer.py --cimg_path /home/aless/singan-seg/Output/RandomSamples
 python style_transfer.py   --cimg_path /home/aless/singan-seg/Output/RandomSamples_ArbitrerySizes/0035-sample/scale_v=1.040000_scale_h=1.040000   --simg_path /home/aless/singan-seg/Input/Images/0035-sample.png   --output_dir /home/aless/singan-seg/Output/Styled_Images   --num_epochs 1000   --cw 1   --sw 1000   --device_id 0   --vgg "vgg16"
 
 ```
+## upscale de l'image
+
+```python
+python upscaling_image.py 
+```
