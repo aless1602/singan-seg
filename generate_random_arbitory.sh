@@ -10,4 +10,5 @@ python random_samples.py --input_name 0035-sample.png \
                          --num_samples 10 \
                          --scale_h 1.07 \
                          --scale_v 1.07 \
-                         --scale_factor 0.99
+                         --scale_factor 0.85 \
+                         --alpha 10

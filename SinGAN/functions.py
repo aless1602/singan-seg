@@ -13,8 +13,6 @@ from SinGAN.imresize import imresize
 import os
 import random
 from sklearn.cluster import KMeans
-import warnings
-warnings.filterwarnings("ignore", category=FutureWarning)
 
 
 # custom weights initialization called on netG and netD
