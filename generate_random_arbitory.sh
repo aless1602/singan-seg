@@ -8,5 +8,6 @@ python random_samples.py --input_name 0035-sample.png \
                          --gpu_id 0 \
                          --input_dir /home/aless/singan-seg/Input/Images \
                          --num_samples 10 \
-                         --scale_h 1.05 \
-                         --scale_v 1.05
+                         --scale_h 1.07 \
+                         --scale_v 1.07 \
+                         --scale_factor 0.99

@@ -25,6 +25,10 @@ or
 main_train.py --input_name polyp_with_4_channels.png  --nc_z 4 --nc_im 4 --gpu_id 0 
 ````
 
+## Personal training
+````python
+python main_train.py --input_name 0035-sample.png  --nc_z 4 --nc_im 4 --gpu_id 0 --scale_factor 0.99 --noise_amp 0.1
+````
 ## To generate samples from pre-trained models
 ```
 bash generate_random.sh
@@ -37,3 +41,9 @@ python random_samples.py --input_name polyp_4_channel_test_1.png --mode random_s
 ```
 
 ### To go back to official repository: [singan-seg-polyp](https://github.com/vlbthambawita/singan-seg-polyp)
+
+## To applicate style transfer
+
+```python
+python style_transfer.py --cimg_path /home/aless/singan-seg/Output/RandomSamples_ArbitrerySizes/0035-sample/scale_v=1.050000_scale_h=1.050000/0_img.png --simg_path /home/aless/singan-seg/Input/Images/0035-sample.png  --num_epochs 1000 --cw 1 --sw 1000 --device_id 0 --vgg "vgg16"
+```

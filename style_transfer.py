@@ -253,10 +253,11 @@ if __name__=="__main__":
 
     opt = parser.parse_args()
 
-    run_device = torch.device("cuda:{}".format(opt.device_id))
+    run_device = torch.device("cuda:{}".format(opt.device_id) if torch.cuda.is_available() else "cpu")
 
-    pil_img = transfer_style(opt.cimg_path, opt.simg_path, opt.num_epochs, opt.cw, opt.sw, 
-                   opt.device_id, opt.vgg, verbose=False, tqdm_position = 0, tqdm_leave = True) 
+    pil_img = transfer_style(opt.cimg_path, opt.simg_path, int(opt.num_epochs), int(opt.cw), int(opt.sw), 
+                   run_device, opt.vgg, verbose=False, tqdm_position=0, tqdm_leave=True)
+
 
     save_path =  opt.cimg_path.split(".")[0] + "_ST" + ".png"
     print(save_path)

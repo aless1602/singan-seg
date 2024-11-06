@@ -1,5 +1,5 @@
 #!/bin/sh
 
-python style_transfer.py --cimg_path /work/vajira/DL/singan-aug/Output/RandomSamples/datacenter_07/gen_start_scale=0/0_img.png \
-                        --simg_path /work/vajira/DATA/michael_data/img_and_mask_together/datacenter_07.png \
+python style_transfer.py --cimg_path /home/aless/singan-seg/Output/RandomSamples/0035-sample/gen_start_scale=1/0_img.png \
+                        --simg_path /home/aless/singan-seg/Input/Images/0035-sample.png \
                         
